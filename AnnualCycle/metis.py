@@ -16,7 +16,7 @@ BOTTOM_PANEL_SIZE = (BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT)
 TOP_PANEL_LOCATION = (FRAME, FRAME)
 BOTTOM_PANEL_LOCATION = (FRAME, TOP_PANEL_HEIGHT + 3 * FRAME)
 
-RESET_THRESHOLD = 30000 #needs to be 30, set really high for debug
+RESET_THRESHOLD = 30 #needs to be 30, set really high for debug
 
 # image parameters
 img_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
@@ -51,27 +51,8 @@ overlay_sugar_img = loadImg('overlay_sugar.png', BOTTOM_PANEL_SIZE)
 overlay_trade_img = loadImg('overlay_trade.png', BOTTOM_PANEL_SIZE)
 overlay_trap_img = loadImg('overlay_trap.png', BOTTOM_PANEL_SIZE)
 
-# no longer needed now that overlays need to be active to be chosen
-# def make_all_activity_set():
-#     return {
-#         overlay_buffalo_fall_img,
-#         overlay_buffalo_spring_img,
-#         overlay_cultivate_img,
-#         overlay_fish_img,
-#         overlay_freight_img,
-#         overlay_goose_fall_img,
-#         overlay_goose_spring_img,
-#         overlay_harvest_img,
-#         overlay_industry_img,
-#         overlay_plant_img,
-#         overlay_sugar_img,
-#         overlay_trade_img,
-#         overlay_trap_img}
-# 
 def draw_base_screen(): 
     screen.fill(backgrColour)
-
-      #Show image of the buttons in pretty much the console configuration on the top half of the screen, and the rectangular calendar chart on the bottom with all calendar entries pastel shaded (I'll call that grayed).
     screen.blit(buttons_img, TOP_PANEL_LOCATION)
     screen.blit(calendar_table_img, BOTTOM_PANEL_LOCATION)
 
@@ -79,15 +60,6 @@ def draw_active_overlays(ols):
     for img in ols:
         screen.blit(img, BOTTOM_PANEL_LOCATION)
         pygame.display.flip()
-
-
-# def toggle_activity(ols, activity):
-#     if activity in overlays:
-#         ols.remove(activity)
-#     else:
-#         ols.add(activity)
-#     return ols
-
 
 def is_conflict (act1, act2):
     if (act1 == overlay_plant_img and act2 == overlay_freight_img ):
@@ -157,8 +129,8 @@ def is_conflict (act1, act2):
 
 def write_and_fade_error(err):
     print(err)
-            #              write error (explain which can't be done together) on top of the display of the button panel
-            #              fade the conflicting items and the error back to gray over 10s
+    # write error (explain which can't be done together) on top of the display of the button panel
+    # fade the conflicting items and the error back to gray over 3s
 
 
 def resolve_conflicts(ols, activity):
@@ -201,12 +173,33 @@ while running:
                 pygame.quit()
                 break
             if event.type == pygame.KEYDOWN:
+                if event.unicode == 'b':
+                    overlays = resolve_conflicts(overlays, overlay_buffalo_fall_img)
+                if event.unicode == 'B':
+                    overlays = resolve_conflicts(overlays, overlay_buffalo_spring_img)
+                if event.unicode == 'c':
+                    overlays = resolve_conflicts(overlays, overlay_cultivate_img)
                 if event.unicode == 'f':
-                    print(len(overlays))
                     overlays = resolve_conflicts(overlays, overlay_fish_img)
+                if event.unicode == 'm': # m for move
+                    overlays = resolve_conflicts(overlays, overlay_freight_img)
+                if event.unicode == 'g':
+                    overlays = resolve_conflicts(overlays, overlay_goose_fall_img)
+                if event.unicode == 'G':
+                    overlays = resolve_conflicts(overlays, overlay_goose_spring_img)
+                if event.unicode == 'h':
+                    overlays = resolve_conflicts(overlays, overlay_harvest_img)
                 if event.unicode == 'i':
                     overlays = resolve_conflicts(overlays, overlay_industry_img)
-                
+                if event.unicode == 'p':
+                    overlays = resolve_conflicts(overlays, overlay_plant_img)
+                if event.unicode == 's':
+                    overlays = resolve_conflicts(overlays, overlay_sugar_img)
+                if event.unicode == 'e': # e for exchange
+                    overlays = resolve_conflicts(overlays, overlay_trade_img)
+                if event.unicode == 't':
+                    overlays = resolve_conflicts(overlays, overlay_trap_img)
+
                 # if there was ANY button, reset timer
                 cycle_start = time.time()
                 # if there was a change, redraw
