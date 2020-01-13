@@ -1,2 +1,2 @@
 # AnnualCycle
-PyZero code for a display
+PyGame Zero code for a display
