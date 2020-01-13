@@ -8,6 +8,7 @@ FRAME = int(HEIGHT * 0.05)
 TOP_PANEL_WIDTH = WIDTH - 2 * FRAME
 TOP_PANEL_HEIGHT = int(HEIGHT/2) - 2 * FRAME
 TOP_PANEL_SIZE = (TOP_PANEL_WIDTH, TOP_PANEL_HEIGHT)
+TOP_PANEL_CENTRE = (FRAME + TOP_PANEL_WIDTH/2 , FRAME + TOP_PANEL_HEIGHT/2)
 
 BOTTOM_PANEL_WIDTH = WIDTH - 2 * FRAME
 BOTTOM_PANEL_HEIGHT = int(HEIGHT/2) - 2 * FRAME
@@ -62,90 +63,103 @@ def draw_active_overlays(ols):
         pygame.display.flip()
 
 def is_conflict (act1, act2):
-    if (act1 == overlay_plant_img and act2 == overlay_freight_img ):
+    if (act1 == overlay_plant_img and act2 == overlay_freight_img ) or (act2 == overlay_plant_img and act1 == overlay_freight_img ):
         return "You can't plant a crop and be away freighting at the same time. "
     
-    if (act1 == overlay_plant_img and act2 == overlay_goose_spring_img ):
+    if (act1 == overlay_plant_img and act2 == overlay_goose_spring_img ) or (act2 == overlay_plant_img and act1 == overlay_goose_spring_img ):
         return "You can't plant a crop and go goose hunting at the same time. "
     
-    if (act1 == overlay_cultivate_img and act2 == overlay_freight_img ):
+    if (act1 == overlay_cultivate_img and act2 == overlay_freight_img ) or (act2 == overlay_cultivate_img and act1 == overlay_freight_img ):
         return "You can't cultivate and take care of your crop and be away freighting at the same time. "
     
-    if (act1 == overlay_cultivate_img and act2 == overlay_buffalo_spring_img ):
+    if (act1 == overlay_cultivate_img and act2 == overlay_buffalo_spring_img ) or (act2 == overlay_cultivate_img and act1 == overlay_buffalo_spring_img ):
         return "You can't take care of your crop and be away buffalo hunting at the same time. "
     
-    if (act1 == overlay_harvest_img and act2 == overlay_freight_img ):
+    if (act1 == overlay_harvest_img and act2 == overlay_freight_img ) or (act2 == overlay_harvest_img and act1 == overlay_freight_img ):
         return "You can't harvest your crop and be away freighting at the same time. "
     
-    if (act1 == overlay_harvest_img and act2 == overlay_buffalo_fall_img ):
+    if (act1 == overlay_harvest_img and act2 == overlay_buffalo_fall_img ) or (act2 == overlay_harvest_img and act1 == overlay_buffalo_fall_img ):
         return "You can't harvest your crop and be away freighting at the same time. "
     
-    if (act1 == overlay_harvest_img and act2 == overlay_goose_fall_img ):
+    if (act1 == overlay_harvest_img and act2 == overlay_goose_fall_img ) or (act2 == overlay_harvest_img and act1 == overlay_goose_fall_img ):
         return "You can't harvest your crop and be away goose hunting at the same time. "
     
-    if (act1 == overlay_industry_img and act2 == overlay_trade_img ):
+    if (act1 == overlay_industry_img and act2 == overlay_trade_img ) or (act2 == overlay_industry_img and act1 == overlay_trade_img ):
         return "You can't harvest your crop and be away goose hunting at the same time. "
     
-    if (act1 == overlay_industry_img and act2 == overlay_trap_img ):
+    if (act1 == overlay_industry_img and act2 == overlay_trap_img ) or (act2 == overlay_industry_img and act1 == overlay_trap_img ):
         return "You can't do domestic industry and be away trapping at the same time. "
     
-    if (act1 == overlay_industry_img and act2 == overlay_buffalo_fall_img ):
+    if (act1 == overlay_industry_img and act2 == overlay_buffalo_fall_img ) or (act2 == overlay_industry_img and act1 == overlay_buffalo_fall_img ):
         return "You can't do domestic industry and be away buffalo hunting at the same time. "
     
-    if (act1 == overlay_industry_img and act2 == overlay_fish_img ):
+    if (act1 == overlay_industry_img and act2 == overlay_fish_img ) or (act2 == overlay_industry_img and act1 == overlay_fish_img ):
         return "You can't do domestic industry and be away fishing at the same time. "
     
-    if (act1 == overlay_industry_img and act2 == overlay_sugar_img ):
+    if (act1 == overlay_industry_img and act2 == overlay_sugar_img ) or (act2 == overlay_industry_img and act1 == overlay_sugar_img ):
         return "You can't do domestic industry and be away sugaring at the same time. "
     
-    if (act1 == overlay_freight_img and act2 == overlay_goose_spring_img ):
+    if (act1 == overlay_freight_img and act2 == overlay_goose_spring_img ) or (act2 == overlay_freight_img and act1 == overlay_goose_spring_img ):
         return "You can't go freighting and goose hunting at the same time. "
     
-    if (act1 == overlay_freight_img and act2 == overlay_buffalo_spring_img ):
+    if (act1 == overlay_freight_img and act2 == overlay_buffalo_spring_img ) or (act2 == overlay_freight_img and act1 == overlay_buffalo_spring_img ):
         return "You can't go freighting and be away buffalo hunting at the same time. "
     
-    if (act1 == overlay_freight_img and act2 == overlay_goose_fall_img ):
+    if (act1 == overlay_freight_img and act2 == overlay_goose_fall_img ) or (act2 == overlay_freight_img and act1 == overlay_goose_fall_img ):
         return "You can't go freighting and be away goose hunting at the same time. "
     
-    if (act1 == overlay_trade_img and act2 == overlay_trap_img ):
+    if (act1 == overlay_trade_img and act2 == overlay_trap_img ) or (act2 == overlay_trade_img and act1 == overlay_trap_img ):
         return "You can't go trading and trapping at the same time. "
     
-    if (act1 == overlay_trade_img and act2 == overlay_buffalo_fall_img ):
+    if (act1 == overlay_trade_img and act2 == overlay_buffalo_fall_img ) or (act2 == overlay_trade_img and act1 == overlay_buffalo_fall_img ):
         return "You can't go trading and buffalo hunting at the same time. "
     
-    if (act1 == overlay_trade_img and act2 == overlay_fish_img ):
+    if (act1 == overlay_trade_img and act2 == overlay_fish_img ) or (act2 == overlay_trade_img and act1 == overlay_fish_img ):
         return "You can't go trading and fishing at the same time. "
     
-    if (act1 == overlay_trade_img and act2 == overlay_sugar_img ):
+    if (act1 == overlay_trade_img and act2 == overlay_sugar_img ) or (act2 == overlay_trade_img and act1 == overlay_sugar_img ):
         return "You can't go trading and be sugaring at the same time. "
     
-    if (act1 == overlay_buffalo_fall_img and act2 == overlay_goose_fall_img ):
+    if (act1 == overlay_buffalo_fall_img and act2 == overlay_goose_fall_img ) or (act2 == overlay_buffalo_fall_img and act1 == overlay_goose_fall_img ):
         return "You can't go buffalo hunting and goose hunting at the same time. "
     
-    if (act1 == overlay_buffalo_fall_img and act2 == overlay_fish_img ):
+    if (act1 == overlay_buffalo_fall_img and act2 == overlay_fish_img ) or (act2 == overlay_buffalo_fall_img and act1 == overlay_fish_img ):
         return "You can't go buffalo hunting and fishing at the same time. "
     else:
         return ""
 
 def write_and_fade_error(err):
+    FONT_COLOR = (0, 0, 0)
+    BG_COLOR = (255, 255, 255)
+    the_error_msg = pygame.font.Font('freesansbold.ttf', 32)
+    the_error = the_error_msg.render(err, False, FONT_COLOR, BG_COLOR) #antialiasing set to false so it looks same as other fonts on graphics
+    err_rect = the_error.get_rect()
+    err_rect.center = TOP_PANEL_CENTRE
+    screen.blit(the_error, err_rect)
+    pygame.display.flip()
+    #pygame.display.update()
     print(err)
+
     # write error (explain which can't be done together) on top of the display of the button panel
     # fade the conflicting items and the error back to gray over 3s
 
 
 def resolve_conflicts(ols, activity):
-    
+    print('resolving conflicts')
     if activity in ols:
         ols.remove(activity)
-        
+        print ('activity was already chosen, disabling')
     else:  
+        print ('activity was not chosen yet')
         if ols: # ie if the set is not empty
             for i in ols.copy(): # for each activity in overlays
                 c = is_conflict (i, activity)
                 if c > "":
+                    print ('and there was a conflict')
                     write_and_fade_error(c)
                     break # break out of for loop
                 else:
+                    print ('and there was no conflict')
                     ols.add(activity)
         else: #if ols is empty
             ols.add(activity)
@@ -199,16 +213,13 @@ while running:
                     overlays = resolve_conflicts(overlays, overlay_trade_img)
                 if event.unicode == 't':
                     overlays = resolve_conflicts(overlays, overlay_trap_img)
-
+                print('----next button---')
                 # if there was ANY button, reset timer
                 cycle_start = time.time()
                 # if there was a change, redraw
                 draw_base_screen()
                 draw_active_overlays(overlays)
                 pygame.display.flip()
-
-
-
 
 pygame.quit()
              
