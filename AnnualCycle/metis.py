@@ -1,27 +1,30 @@
 import pygame, os, time
 
-WIDTH, HEIGHT = 800, 600 # 1778, 1000  # dimensions of our game window
-# 4k is 3840 x 2160, 1.77 ratio
+# buttons image is 3751 x 1666
+# schedule image is 3751 x 680
+# we'd want to display it with a 10%  frame
 
-# FPS = 30 # frames per second
-FRAME = int(HEIGHT * 0.05)
-TOP_PANEL_WIDTH = WIDTH - 2 * FRAME
-TOP_PANEL_HEIGHT = int(HEIGHT/2) - 2 * FRAME
+WIDTH, HEIGHT = 1280, 720 # dim for debugging
+# WIDTH, HEIGHT = 2560, 1440 # the monitor they chose
+# https://www.amazon.ca/dp/B0787XMLZQ/ref=s9_acsd_simh_bw_c2_x_0_i?pf_rd_m=A1IM4EOPHS76S7&pf_rd_s=merchandised-search-6&pf_rd_r=9ZXXDXVGTQW57HYR0SXF&pf_rd_t=101&pf_rd_p=5233d856-97c0-4cdd-b746-6135fe6f2774&pf_rd_i=677246011
+
+TOP_PANEL_WIDTH = WIDTH 
+TOP_PANEL_HEIGHT = int(HEIGHT/2)
 TOP_PANEL_SIZE = (TOP_PANEL_WIDTH, TOP_PANEL_HEIGHT)
-TOP_PANEL_CENTRE = (FRAME + TOP_PANEL_WIDTH/2 , FRAME + TOP_PANEL_HEIGHT/2)
+TOP_PANEL_CENTRE = (TOP_PANEL_WIDTH/2 , TOP_PANEL_HEIGHT/2)
 
-BOTTOM_PANEL_WIDTH = WIDTH - 2 * FRAME
-BOTTOM_PANEL_HEIGHT = int(HEIGHT/2) - 2 * FRAME
+BOTTOM_PANEL_WIDTH = WIDTH
+BOTTOM_PANEL_HEIGHT = int(HEIGHT/2)
 BOTTOM_PANEL_SIZE = (BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT)
 
-TOP_PANEL_LOCATION = (FRAME, FRAME)
-BOTTOM_PANEL_LOCATION = (FRAME, TOP_PANEL_HEIGHT + 3 * FRAME)
+TOP_PANEL_LOCATION = (0,0)
+BOTTOM_PANEL_LOCATION = (0, TOP_PANEL_HEIGHT)
 
 RESET_THRESHOLD = 30 #needs to be 30, set really high for debug
 
 # image parameters
 img_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
-backgrColour = [125, 125, 125]
+BACK_COLOUR = [125, 125, 125]
 
 # initialize pygame and create window
 pygame.init()
@@ -37,7 +40,7 @@ def loadImg(imgnm, size):
     return imgScaled
 
 buttons_img = loadImg('buttons.png', TOP_PANEL_SIZE)
-calendar_table_img = loadImg('calendar_table_white_back.png', BOTTOM_PANEL_SIZE)
+calendar_table_img = loadImg('calendar_table.png', BOTTOM_PANEL_SIZE)
 overlay_buffalo_fall_img = loadImg('overlay_buffalo_fall.png', BOTTOM_PANEL_SIZE)
 overlay_buffalo_spring_img = loadImg('overlay_buffalo_spring.png', BOTTOM_PANEL_SIZE)
 overlay_cultivate_img = loadImg('overlay_cultivate.png', BOTTOM_PANEL_SIZE)
@@ -53,7 +56,7 @@ overlay_trade_img = loadImg('overlay_trade.png', BOTTOM_PANEL_SIZE)
 overlay_trap_img = loadImg('overlay_trap.png', BOTTOM_PANEL_SIZE)
 
 def draw_base_screen(): 
-    screen.fill(backgrColour)
+    screen.fill(BACK_COLOUR)
     screen.blit(buttons_img, TOP_PANEL_LOCATION)
     screen.blit(calendar_table_img, BOTTOM_PANEL_LOCATION)
 
@@ -128,21 +131,28 @@ def is_conflict (act1, act2):
     else:
         return ""
 
-def write_and_fade_error(err):
-    FONT_COLOR = (0, 0, 0)
-    BG_COLOR = (255, 255, 255)
-    the_error_msg = pygame.font.Font('freesansbold.ttf', 32)
-    the_error = the_error_msg.render(err, False, FONT_COLOR, BG_COLOR) #antialiasing set to false so it looks same as other fonts on graphics
+
+def display_and_fade_message(bg_colour, msg, fade_time):
+    FONT_COLOR = (0,0,0)
+    the_error_msg = pygame.font.Font(None, 32) #not setting a font, but could
+    the_error = the_error_msg.render(msg, True, FONT_COLOR, bg_colour) #antialiasing set to false so it looks same as other fonts on graphics
     err_rect = the_error.get_rect()
-    err_rect.center = TOP_PANEL_CENTRE
-    screen.blit(the_error, err_rect)
-    pygame.display.flip()
-    #pygame.display.update()
-    print(err)
+    err_rect.center = pygame.display.get_surface().get_size() 
+    err_rect.center = err_rect.center[0] / 2, err_rect.center[1] / 2  #get ctr of window
 
-    # write error (explain which can't be done together) on top of the display of the button panel
-    # fade the conflicting items and the error back to gray over 3s
+    print ("must still size automatically") # debug - pygame.display.get_surface().get_size()  * (0.5, 0.5) #get ctr of window
 
+    orig_screen = screen.copy() #get current display
+    fade_step = fade_time/255
+    
+    for i in range (255, -1, -1):   
+        screen.fill(bg_colour)
+        screen.blit(orig_screen, (0,0))
+        the_error.set_alpha(i) #sets transparency
+        screen.blit(the_error, err_rect)
+        pygame.display.update()
+        time.sleep(fade_step)
+        
 
 def resolve_conflicts(ols, activity):
     print('resolving conflicts')
@@ -156,7 +166,7 @@ def resolve_conflicts(ols, activity):
                 c = is_conflict (i, activity)
                 if c > "":
                     print ('and there was a conflict')
-                    write_and_fade_error(c)
+                    display_and_fade_message(BACK_COLOUR, c, 3) #display error c for .. seconds
                     break # break out of for loop
                 else:
                     print ('and there was no conflict')
